@@ -13,24 +13,24 @@
 <h2 class="text-center">Hi, {{details.name}}</h2>
 
 <br>
-<div class="container-lg">
+<div class="container">
   <div class="table-responsive">
     <div class="table-wrapper">
-      <div class="table-title w-auto">
-        <div class="row">
-          <div class="col-sm-8">
+      <div class="table-title w-auto container mx-3">
+        
+         
             <h2>User <b>Details</b></h2>
-          </div>
+       
          
          
 
-        </div>
-      </div>
-      <table class="table table-bordered  w-auto">
-        <form action="{% url 'user' %}" method="post" enctype="multipart/form-data">
+       
+      <table class="table table-bordered  w-auto ">
+        
+        <form action="{% url 'user' %}" method="post" enctype="multipart/form-data" class="mx-3">
           {% csrf_token %}
      
-              <div class="form-group">
+              <div class="form-group px-3">
                 {% if details.photo is None %}
                 <a href="#">
                 <img src="https://www.cometdocs.com/images/default-profile-image.png" id="imgb" alt="Admin" class="rounded-circle" width="150"></a>
@@ -61,7 +61,7 @@
               
               <div class="form-group">
                 <p><b>Address:</b></p>
-                <textarea name="address"  id="address" cols="92" rows="3" placeholder="Address">{{details.address}}</textarea>
+                <textarea class="form-control rounded-0" name="address"  id="address"  rows="3" placeholder="Address">{{details.address}}</textarea>
               </div>
           
           <div class="form-group">
@@ -98,6 +98,9 @@
           
 
       </table>
+          
+        
+  </div>
 
     </div>
   </div>

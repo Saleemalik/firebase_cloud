@@ -58,6 +58,9 @@ def signup(request):
                 uid = user['localId']
                 request.session['uid']=str(uid)
 
+                user_token = user['idToken']
+                request.session['u_token'] = str(user_token)
+
                 data = {"name": name} 
                
                 db.child("users").child(uid).child('details').set(data)
