@@ -1,0 +1,180 @@
+{% extends 'home.html' %}
+{% block content %}
+<style>
+body {
+	color: #fff;
+	background: #63738a;
+	font-family: 'Roboto', sans-serif;
+}
+.form-control {
+	height: 40px;
+	box-shadow: none;
+	color: #969fa4;
+}
+.form-control:focus {
+	border-color: #5cb85c;
+}
+.form-control, .btn {        
+	border-radius: 3px;
+}
+.signup-form {
+	width: 450px;
+	margin: 0 auto;
+	padding: 30px 0;
+  	font-size: 15px;
+}
+.signup-form h2 {
+	color: #636363;
+	margin: 0 0 15px;
+	position: relative;
+	text-align: center;
+}
+.signup-form h2:before, .signup-form h2:after {
+	content: "";
+	height: 2px;
+	width: 30%;
+	background: #d4d4d4;
+	position: absolute;
+	top: 50%;
+	z-index: 2;
+}	
+.signup-form h2:before {
+	left: 0;
+}
+.signup-form h2:after {
+	right: 0;
+}
+.signup-form .hint-text {
+	color: #999;
+	margin-bottom: 30px;
+	text-align: center;
+}
+.signup-form form {
+	color: #999;
+	border-radius: 3px;
+	margin-bottom: 15px;
+	background: #f2f3f7;
+	box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+	padding: 30px;
+}
+.signup-form .form-group {
+	margin-bottom: 20px;
+}
+.signup-form input[type="checkbox"] {
+	margin-top: 3px;
+}
+.signup-form .btn {        
+	font-size: 16px;
+	font-weight: bold;		
+	min-width: 140px;
+	outline: none !important;
+}
+.signup-form .row div:first-child {
+	padding-right: 10px;
+}
+.signup-form .row div:last-child {
+	padding-left: 10px;
+}    	
+.signup-form a {
+	color: #fff;
+	text-decoration: underline;
+}
+.signup-form a:hover {
+	text-decoration: none;
+}
+.signup-form form a {
+	color: #5cb85c;
+	text-decoration: none;
+}	
+.signup-form form a:hover {
+	text-decoration: underline;
+}  
+</style>
+</head>
+<body>
+<div class="signup-form">
+    <form action="/register/" method="post">
+		{% csrf_token %}
+		<h2>Register</h2>
+		<p class="hint-text">Create your account. It's free and only takes a minute.</p>
+        <div class="form-group">
+			
+				<input type="text" id="name" class="form-control" name="name" placeholder="Name" >
+				
+        </div>
+		
+        <div class="form-group">
+        	<input type="email" id =email class="form-control" name="email" placeholder="Email">
+        </div>
+		
+		<div class="form-group">
+            <input type="password" class="form-control" name="password1" id=password1 placeholder="Password">
+        </div>
+		<div class="form-group">
+            <input type="password" class="form-control" name="password2" id=password2 placeholder="Confirm Password">
+        </div>     
+       
+		<div class="form-group">
+            <button id="log-button" type="button" class="btn btn-success btn-lg btn-block">Register Now</button>
+        </div>
+    </form>
+    <script>
+        $('#log-button').click(function(){
+						
+            var name = $("#name").val();
+			var email = $("#email").val();
+            var password1 = $("#password1").val();
+			var password2 = $("#password2").val();
+			
+			
+			var mailFormat1 = email.indexOf('@');
+			var mailFormat2 = email.lastIndexOf('.')
+            var data = {
+                'csrfmiddlewaretoken':'{{csrf_token}}',
+                'name': name,
+				'email' : email,
+                'password1': password1,
+				'password2': password2,
+            }
+            if (name === "" || email === "" || password1 === "" || password2 === ""){
+                $('#errormsg').html("Please fill all fields")
+            }
+            else if(mailFormat1<1 || mailFormat2 > email.length-3 || mailFormat1+2 > mailFormat2 ){
+                $('#errormsg').html("Please enter valid email address")
+            }
+            else{
+                $.ajax({
+                    url:'{% url "signup" %}',
+                    method : 'POST',
+                    data : data,
+                    type : JSON,
+                    
+                    success: function(data){
+                        if (data == 'true'){
+                            window.location.replace('{% url "user" %}')
+                        }
+                        else if(data == 'false1'){
+                            
+                            $("#errormsg").html("Unable to create account with invalid information")
+                        }
+						else if(data == 'false2'){
+                            
+                            $("#errormsg").html("Email already taken")
+                        } 
+						else if(data == 'false3'){
+                            
+                            $("#errormsg").html("password not matching")
+                        }
+                    }
+                })
+            }
+        })
+    </script>
+	<div class="text-center">Already have an account? <a href="{% url 'login' %}">Sign in</a></div>
+	<br>
+	
+	<p id="errormsg" class="text-center"></p>
+
+</div>
+</body>
+{% endblock %}

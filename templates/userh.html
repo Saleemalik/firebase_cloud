@@ -1,0 +1,148 @@
+{% extends 'home.html' %}
+{% block content %}
+<style>
+  p{
+    margin-bottom: 0em;
+  }
+</style>
+<br>
+<h1 class="text-center">HOME PAGE</h1>
+<br>
+
+<br>
+<h2 class="text-center">Hi, {{details.name}}</h2>
+
+<br>
+<div class="container-lg">
+  <div class="table-responsive">
+    <div class="table-wrapper">
+      <div class="table-title w-auto">
+        <div class="row">
+          <div class="col-sm-8">
+            <h2>User <b>Details</b></h2>
+          </div>
+         
+         
+
+        </div>
+      </div>
+      <table class="table table-bordered  w-auto">
+        <form action="{% url 'user' %}" method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+     
+              <div class="form-group">
+                {% if details.photo is None %}
+                <a href="#">
+                <img src="https://www.cometdocs.com/images/default-profile-image.png" id="imgb" alt="Admin" class="rounded-circle" width="150"></a>
+                
+                {% else %}
+                  <a href="#">
+                <img src="{{details.photo}}" alt="Admin" id="imgb" class="rounded-circle" width="150"></button></a>
+                {% endif %}
+                <input type="file" class="form-control" id="photo" name="photo" onclick="return imagePreview()" hidden>
+              </div>
+              <div class="form-group">
+            
+              <p><b>Name:</b></p>
+            
+              <input type="text" id="name" value="{{details.name}}" class="form-control" name="name" placeholder="Name" >
+              
+              </div>
+
+              <div class="form-group">
+            
+                <p><b>DOB:</b></p>
+              
+                <input type="date" id="dob" value="{{details.DOB}}" class="form-control" name="dob" placeholder="DOB" >
+                
+                </div>
+             
+
+              
+              <div class="form-group">
+                <p><b>Address:</b></p>
+                <textarea name="address"  id="address" cols="92" rows="3" placeholder="Address">{{details.address}}</textarea>
+              </div>
+          
+          <div class="form-group">
+                  <button id="log-button" type="submit" class="btn btn-success">Update</button>
+              </div>
+          </form>
+          <script>
+            $('#imgb').click(function(){
+              $("#photo").click();
+                
+            })
+            function readURL(input) {
+              if (input.files && input.files[0]) {
+                var reader = new FileReader();
+              
+                reader.onload = function (e) {
+                  $('#imgb').attr('src', e.target.result);
+                   
+                }
+              
+                reader.readAsDataURL(input.files[0]);
+              }
+              }
+           
+            function imagePreview(){
+              $("#photo").change(function(){
+                  readURL(this);
+                });
+          }
+
+          let uri = "{{details.photo}}"
+          console.log(uri)
+          </script>
+          
+
+      </table>
+
+    </div>
+  </div>
+  <br>
+  <main class="d-flex align-items-center min-vh-100 py-3 py-md-0">
+
+
+</div>
+<main class="d-flex align-items-center min-vh-100 py-3 py-md-0">
+  {% csrf_token %}
+  <div class="container">
+    <div class="card login-card">
+      <div class="row no-gutters">
+
+        <br>
+        <!-- <div class="col-md-7"> -->
+        <div class="card-body">
+
+          <p class="login-card-description">Welcomes to your home page</p>
+          <form action="logout" method="post">
+            {% csrf_token %}
+            <div>
+              <div class="form-group contact-block1">
+
+
+              </div>
+            </div>
+            <div>
+
+            </div>
+            <div>
+              <a name="logout" href="{% url 'logout' %}" style="color: floralwhite;" id="logout"
+                class="btn btn-block login-btn mb-4 bg-primary" type="submit">logout</a>
+            </div>
+          </form>
+          <br>
+
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  </div>
+</main>
+
+{% endblock %}

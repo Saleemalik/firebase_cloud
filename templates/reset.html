@@ -1,0 +1,98 @@
+{% extends 'home.html' %}
+{% block content %}
+<header>
+    <style>
+        .bottom {
+            color: brown;
+            width: 100%;
+            margin-top: 50px !important
+        }
+        .bottom a{
+            color: lavenderblush;
+            background-color: dodgerblue;
+        }
+    </style>
+</header>
+<br>
+<h1 class="text-center">Reset Password</h1>
+<br>
+       
+<main id="main" class="d-flex align-items-center min-vh-100 py-3 py-md-0">
+    
+  <div class="container">
+    <div class="card login-card">
+      <div class="row no-gutters">
+       
+        <!-- <div class="col-md-7"> -->
+          <div class="card-body">
+            
+            <p class="login-card-description">Provide your Email....
+            </p> 
+            <form name="log" class="login">
+                {% csrf_token %}
+                <div>
+                    <div class="form-group contact-block1">
+                      <input id="log-name" type="text" name="email" class="form-control" placeholder="Email"  />
+                      <p id="errorname"></p>
+                      <div class="validation"></div>
+                    </div>
+                  </div>
+                 
+                <div>
+                    <input name="login" id="log-button" class="btn btn-block login-btn mb-4 bg-primary" type="button" value="send request">
+                    <!-- <input name="login" id="log-button" class="btn btn-block login-btn mb-4 bg-primary" type="button" > -->
+                </div>
+               
+                <div class="bottom text-center mb-5">
+                    <p class="sm-text mx-auto mb-3">Don't have an account?<a class="btn btn-white ml-2" href="{% url 'signup' %}" type="button">create new</a></p>
+
+                </div>
+              </form>
+              <p id="errormsg" class="text-center"></p>
+              <script>
+                $('#log-button').click(function(){
+                    
+                    var email = $("#log-name").val();
+                    var data = {
+                        'csrfmiddlewaretoken':'{{csrf_token}}',
+                        'email': email,
+                    }
+                    if (email === ""){
+                        $('#errormsg').html("enter your email")
+                    }
+                    
+                    else{
+                        $.ajax({
+                            url:'{% url "reset" %}',
+                            method : 'POST',
+                            data : data,
+                            type : JSON,
+                            
+                            success: function(data){
+                                if (data == 'true'){
+                                  alert("reset password link has been send to your email")
+                                  window.location.replace('{% url "login" %}')
+
+                                }
+                                else if(data == 'false'){
+                                    
+                                  $("#errormsg").html("email not registered")
+                                }
+                            }
+                        })
+                    }
+                })
+            </script>
+            
+              </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br>
+
+    
+  </div>
+</main>
+
+{% endblock %}
